@@ -111,4 +111,16 @@ object List {
   def concat[A](l: List[List[A]]): List[A] =
     foldLeft(l, Nil: List[A])((b, a) => append(b, a))
 
+  def add1(l: List[Int]): List[Int] =
+    foldRight(l, Nil: List[Int])((a, b) => Cons(a + 1, b))
+
+  def toStrings(l: List[Double]): List[String] =
+    foldRight(l, Nil: List[String])((a, b) => Cons(a.toString, b))
+
+  def map[A, B](l: List[A], f: A => B): List[B] =
+    foldRight(l, Nil: List[B])((a, b) => Cons(f(a), b))
+
+  def filter[A](l: List[A], f: A => Boolean): List[A] =
+    foldRight(l, Nil: List[A])((a, b) => if (f(a)) Cons(a, b) else b)
+
 }

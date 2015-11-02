@@ -49,7 +49,7 @@ class ListTest extends FlatSpec with Matchers {
   }
 
   "FoldLeft" should "should fold list from left to right" in {
-    List.foldLeft(List(1, 2, 3, 4), 10)(_ + _) should equal(20)
+    List.foldLeft(List(1, 2, 3, 4), Nil: List[Int])((b, a) => List.append(Cons(a, Nil), b)) should equal(List(4, 3, 2, 1))
   }
 
   "ProductFoldLeft" should "process the product of the elements of the list" in {
@@ -86,5 +86,21 @@ class ListTest extends FlatSpec with Matchers {
 
   "Concat" should "concatenate list of lists" in {
     List.concat(List(List(1, 2, 3), List(10, 11), List(5))) should equal(List(1, 2, 3, 10, 11, 5))
+  }
+
+  "Add1" should "add one to each element of the list" in {
+    List.add1(List(10, 11, 12)) should equal(List(11, 12, 13))
+  }
+
+  "ToStrings" should "transforms list of doubles to list of strings" in {
+    List.toStrings(List(5d, 6d, 7d)) should equal(List("5.0", "6.0", "7.0"))
+  }
+
+  "Map" should "update each element of the list" in {
+    List.map(List(4, 5, 6), (a: Int) => a * 2) should equal(List(8, 10, 12))
+  }
+
+  "Filter" should "only keep elements that satisfy given condition" in {
+    List.filter(List(3, 6, 10), (a: Int) => a % 3 == 0) should equal(List(3, 6))
   }
 }
