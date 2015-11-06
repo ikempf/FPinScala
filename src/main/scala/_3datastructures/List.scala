@@ -117,10 +117,42 @@ object List {
   def toStrings(l: List[Double]): List[String] =
     foldRight(l, Nil: List[String])((a, b) => Cons(a.toString, b))
 
-  def map[A, B](l: List[A], f: A => B): List[B] =
+  def map[A, B](l: List[A])(f: A => B): List[B] =
     foldRight(l, Nil: List[B])((a, b) => Cons(f(a), b))
 
-  def filter[A](l: List[A], f: A => Boolean): List[A] =
+  def filter[A](l: List[A])(f: A => Boolean): List[A] =
     foldRight(l, Nil: List[A])((a, b) => if (f(a)) Cons(a, b) else b)
+
+  def flatMap[A](l: List[A])(f: A => List[A]): List[A] =
+    foldRight(l, Nil: List[A])((a, b) => append(f(a), b))
+
+  def filterViaFlatMap[A](l: List[A])(f: A => Boolean): List[A] =
+    flatMap(l)((a) => if (f(a)) List(a) else Nil)
+
+  def addLists(l1: List[Int], l2: List[Int]): List[Int] = {
+    (l1, l2) match {
+      case (Nil, _) => Nil
+      case (_, Nil) => Nil
+      case (Cons(h1, t1), Cons(h2, t2)) => Cons(h1 + h2, addLists(t1, t2))
+    }
+  }
+
+  def zip[A, B, C](l1: List[A], l2: List[B])(f: (A, B) => C): List[C] = {
+    (l1, l2) match {
+      case (Nil, _) => Nil
+      case (_, Nil) => Nil
+      case (Cons(h1, t1), Cons(h2, t2)) => Cons(f(h1, h2), zip(t1, t2)(f))
+    }
+  }
+
+  @tailrec
+  def hasSubsequence[A](l: List[A], subSequence: List[A]): Boolean = {
+    (l, subSequence) match {
+      case (_, Nil) => true
+      case (Cons(h1, t1), Cons(h2, t2)) if h1 == h2 => hasSubsequence(t1, t2)
+      case (Cons(h1, t1), Cons(h2, t2)) => hasSubsequence(t1, subSequence)
+      case _ => false
+    }
+  }
 
 }

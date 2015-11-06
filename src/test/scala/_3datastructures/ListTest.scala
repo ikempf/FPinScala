@@ -97,10 +97,34 @@ class ListTest extends FlatSpec with Matchers {
   }
 
   "Map" should "update each element of the list" in {
-    List.map(List(4, 5, 6), (a: Int) => a * 2) should equal(List(8, 10, 12))
+    List.map(List(4, 5, 6))(_ * 2) should equal(List(8, 10, 12))
   }
 
   "Filter" should "only keep elements that satisfy given condition" in {
-    List.filter(List(3, 6, 10), (a: Int) => a % 3 == 0) should equal(List(3, 6))
+    List.filter(List(3, 6, 10))(_ % 3 == 0) should equal(List(3, 6))
   }
+
+  "FlatMap" should "should update each element of the list and flatten the result" in {
+    List.flatMap(List(3, 4, 10))(a => List(a)) should equal(List(3, 4, 10))
+    List.flatMap(List(3, 4, 10))(a => List(a, a)) should equal(List(3, 3, 4, 4, 10, 10))
+  }
+
+  "FilterViaFlatMap" should "filter elements not satisfying the given predicate" in {
+    List.filterViaFlatMap(List(1, 2, 3))(a => a == 1) should equal(List(1))
+    List.filterViaFlatMap(List(1, 2, 3))(a => a > 1) should equal(List(2, 3))
+  }
+
+  "AddLists" should "create a new list by adding corresponding elements" in {
+    List.addLists(List(1, 2, 3), List(4, 5, 6)) should equal(List(5, 7, 9))
+  }
+
+  "Zip" should "create a new list by applying given binary function to elemnts of the lists" in {
+    List.zip(List(1, 2, 3), List(4, 5, 6))(_ + _) should equal(List(5, 7, 9))
+  }
+
+  "HasSubsequence" should "return true if the given list contains the given subsequence" in {
+    List.hasSubsequence(List(4, 5, 6, 1, 4, 5), List(9, 4, 7)) should equal(false)
+    List.hasSubsequence(List(4, 5, 6, 1, 4, 5), List(5, 6, 1)) should equal(true)
+  }
+
 }
