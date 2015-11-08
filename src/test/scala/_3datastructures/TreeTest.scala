@@ -37,6 +37,11 @@ class TreeTest extends FlatSpec with Matchers {
     Tree.depthViaFold(Branch(Leaf(5), Branch(Branch(Leaf(10), Leaf(4)), Leaf(2)))) should equal(3)
   }
 
+  "MapViaFold" should "apply given function to each element of the tree" in {
+    Tree.mapViaFold(Leaf(4))(_.toString) should equal(Leaf("4"))
+    Tree.mapViaFold(Branch(Leaf(4d), Branch(Leaf(2d), Leaf(1d))))(_ / 2) should equal(Branch(Leaf(2), Branch(Leaf(1), Leaf(0.5))))
+  }
+
   "FoldWithAcc" should "fold tree and return accumulated result" in {
     Tree.foldWithAcc(
       Branch(Leaf(5), Branch(Branch(Leaf(10), Leaf(4)), Leaf(2))),

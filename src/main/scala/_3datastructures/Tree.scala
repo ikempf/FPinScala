@@ -43,6 +43,9 @@ object Tree {
   def depthViaFold[A](t: Tree[A]): Int =
     fold(t)(_ => 0)(1 + _ + _)
 
+  def mapViaFold[A, B](t: Tree[A])(f: A => B): Tree[B] =
+    fold(t)(a => Leaf(f(a)): Tree[B])(Branch(_, _))
+
   def foldWithAcc[A, B](t: Tree[A], z: B)(f: (A, B) => B)(g: (B, B) => B): B = t match {
     case Branch(l, r) => g(foldWithAcc(l, z)(f)(g), foldWithAcc(r, z)(f)(g))
     case Leaf(a) => f(a, z)
