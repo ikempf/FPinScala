@@ -34,4 +34,34 @@ class OptionTest extends FlatSpec with Matchers {
     Some(5).filter(_ < 3) should equal(None)
   }
 
+  "Mean" should "calculate the mean of the sequence" in {
+    Option.mean(Seq(0, 5, 10)) should equal(Some(5))
+    Option.mean(List(1, 2, 3, 4, 5)) should equal(Some(3))
+  }
+
+  "Variance" should "calculate variance of given sequence" in {
+    Option.variance(List()) should equal(None)
+    Option.variance(List(1, 2, 3, 4)) should equal(Some(1.25))
+    Option.variance(List(1, 2, 3, 4, 5)) should equal(Some(2))
+  }
+
+  "Variance2" should "calculate variance of given sequence" in {
+    Option.variance2(List()) should equal(None)
+    Option.variance2(List(1, 2, 3, 4)) should equal(Some(1.25))
+    Option.variance2(List(1, 2, 3, 4, 5)) should equal(Some(2))
+  }
+
+  "Map2" should "combine two options" in {
+    Option.map2[Int, Int, Int](None, None)(_ + _) should equal(None)
+    Option.map2[Int, Int, Int](None, Some(3))(_+_) should equal(None)
+    Option.map2(Some(4), Some(3))(_+_) should equal(Some(7))
+  }
+
+//  "Sequence" should "combine a list of options" in {
+//    Option.sequence(List(None, None, Some(3))) should equal (None)
+//    Option.sequence(List(Some(3), Some(2), Some(6))) should equal (List(3, 2, 6))
+//    Option.sequence(List()) should equal (List())
+//  }
+
+
 }
