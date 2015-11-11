@@ -46,22 +46,32 @@ class OptionTest extends FlatSpec with Matchers {
   }
 
   "Variance2" should "calculate variance of given sequence" in {
-    Option.variance2(List()) should equal(None)
-    Option.variance2(List(1, 2, 3, 4)) should equal(Some(1.25))
-    Option.variance2(List(1, 2, 3, 4, 5)) should equal(Some(2))
+    Option.varianceBis(List()) should equal(None)
+    Option.varianceBis(List(1, 2, 3, 4)) should equal(Some(1.25))
+    Option.varianceBis(List(1, 2, 3, 4, 5)) should equal(Some(2))
   }
 
   "Map2" should "combine two options" in {
     Option.map2[Int, Int, Int](None, None)(_ + _) should equal(None)
-    Option.map2[Int, Int, Int](None, Some(3))(_+_) should equal(None)
-    Option.map2(Some(4), Some(3))(_+_) should equal(Some(7))
+    Option.map2[Int, Int, Int](None, Some(3))(_ + _) should equal(None)
+    Option.map2(Some(4), Some(3))(_ + _) should equal(Some(7))
   }
 
-//  "Sequence" should "combine a list of options" in {
-//    Option.sequence(List(None, None, Some(3))) should equal (None)
-//    Option.sequence(List(Some(3), Some(2), Some(6))) should equal (List(3, 2, 6))
-//    Option.sequence(List()) should equal (List())
-//  }
+  "Sequence" should "combine a list of options" in {
+    Option.sequence(List(None, None, Some(3))) should equal(None)
+    Option.sequence(List(Some(3), Some(2), Some(6))) should equal(Some(List(3, 2, 6)))
+    Option.sequence(List()) should equal(Some(List()))
+  }
 
+  "SequenceViaFoldRight" should "combine a list of options" in {
+    Option.sequenceViaFoldRight(List(None, None, Some(3))) should equal(None)
+    Option.sequenceViaFoldRight(List(Some(3), Some(2), Some(6))) should equal(Some(List(3, 2, 6)))
+    Option.sequenceViaFoldRight(List()) should equal(Some(List()))
+  }
+
+  "Traverse" should "sequnence and map givent list" in {
+    Option.traverse(List("2", "5"))((a) => Option.Try(a.toInt)) should equal(Some(List(2, 5)))
+    Option.traverse(List("2", "5", "a"))((a) => Option.Try(a.toInt)) should equal(None)
+  }
 
 }

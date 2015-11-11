@@ -34,11 +34,17 @@ case object None extends Option[Nothing]
 
 
 object Option {
+  def Try[A](a: => A): Option[A] =
+    try Some(a)
+    catch {
+      case e: Exception => None
+    }
+
   def mean(xs: Seq[Double]): Option[Double] =
     if (xs.isEmpty)
       None
     else
-      Some(xs.foldRight(0: Double)(_ + _) / xs.length)
+      Some(xs.sum / xs.length)
 
   def variance(xs: Seq[Double]): Option[Double] = {
     mean(xs)
@@ -46,19 +52,27 @@ object Option {
       .map(_ / xs.length)
   }
 
-  def variance2(xs: Seq[Double]): Option[Double] = {
-    mean(xs)
-      .flatMap((m) => mean(xs.map(x => math.pow(x - m, 2))))
+  def varianceBis(xs: Seq[Double]): Option[Double] = {
+    mean(xs).flatMap((m) => mean(xs.map(x => math.pow(x - m, 2))))
   }
 
-  def map2[A, B, C](a:Option[A], b: Option[B])(f: (A, B) => C): Option[C] = {
-    (a, b) match {
-      case (None, _) => None
-      case (_, None) => None
-      case (Some(a2), Some(b2)) => Some(f(a2, b2))
-    }
+  def map2[A, B, C](a: Option[A], b: Option[B])(f: (A, B) => C): Option[C] =
+    a flatMap (aa => b map (bb => f(aa, bb)))
+
+  def sequence[A](xs: List[Option[A]]): Option[List[A]] = xs match {
+    case x :: t => map2(x, sequence(t))(_ :: _)
+    case Nil => Some(Nil)
   }
 
-//  def sequence[A](xs:List[Option[A]]): Option[List[A]] =
-//    xs.foldRight(Some(Nil):Option[A])()
+  def sequenceViaFoldRight[A](xs: List[Option[A]]): Option[List[A]] =
+    xs.foldRight(Some(Nil): Option[List[A]])((a, z) => map2(a, z)(_ :: _))
+
+  def traverse[A, B](xs: List[A])(f: A => Option[B]): Option[List[B]] = xs match {
+    case x::t => map2(f(x), traverse(t)(f))(_::_)
+    case Nil => Some(Nil)
+  }
+
+  def sequenceViaTraverse[A](xs: List[Option[A]]): Option[List[A]] =
+    traverse(xs)(identity)
+
 }
