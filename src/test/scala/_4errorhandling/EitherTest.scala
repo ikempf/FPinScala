@@ -32,4 +32,21 @@ class EitherTest extends FlatSpec with Matchers {
     Left(5).map2ViaForComprehension(Left(3))((Nothing, x) => x) should equal(Left(5))
   }
 
+  "Sequence" should "combine a list of Either" in {
+    Either.sequence(List(Right(10), Right(2), Right(4))) should equal (Right(List(10, 2, 4)))
+    Either.sequence(List(Right(10), Left("error"), Right(4))) should equal (Left("error"))
+    Either.sequence(List(Left("error1"), Right(2), Left("error2"))) should equal (Left("error1"))
+  }
+
+  val eitherFromInt = (a:Int) => if (a < 5) Left("error") else Right(a*2)
+  "Traverse" should "combine a list of Either and apply given function" in {
+    Either.traverse(List(10, 7, 13))(eitherFromInt) should equal (Right(List(20, 14, 26)))
+    Either.traverse(List(3, 7, 8))(eitherFromInt) should equal (Left("error"))
+  }
+
+  "TraverseViaFoldRight" should "combine a list of Either and apply given function" in {
+    Either.traverse(List(10, 7, 13))(eitherFromInt) should equal (Right(List(20, 14, 26)))
+    Either.traverse(List(3, 7, 8))(eitherFromInt) should equal (Left("error"))
+  }
+
 }
