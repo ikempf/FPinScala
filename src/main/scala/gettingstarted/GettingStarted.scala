@@ -1,4 +1,4 @@
-package _2gettingstarted
+package gettingstarted
 
 import scala.annotation.tailrec
 
@@ -40,5 +40,6 @@ object GettingStarted {
     (a, b) => f(a)(b)
 
   def compose[A, B, C](f: B => C, g: A => B) =
-    (a:A) => f(g(a))
+    (a: A) => f(g(a))
+
 }

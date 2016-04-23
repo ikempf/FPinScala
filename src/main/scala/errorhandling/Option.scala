@@ -1,4 +1,4 @@
-package _4errorhandling
+package errorhandling
 
 sealed trait Option[+A] {
   def map[B](f: A => B): Option[B] = this match {
@@ -34,6 +34,7 @@ case object None extends Option[Nothing]
 
 
 object Option {
+
   def Try[A](a: => A): Option[A] =
     try Some(a)
     catch {
@@ -68,7 +69,7 @@ object Option {
     xs.foldRight(Some(Nil): Option[List[A]])((a, z) => map2(a, z)(_ :: _))
 
   def traverse[A, B](xs: List[A])(f: A => Option[B]): Option[List[B]] = xs match {
-    case x::t => map2(f(x), traverse(t)(f))(_::_)
+    case x :: t => map2(f(x), traverse(t)(f))(_ :: _)
     case Nil => Some(Nil)
   }
 

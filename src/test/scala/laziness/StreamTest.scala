@@ -1,4 +1,4 @@
-package _5laziness
+package laziness
 
 import org.scalatest.{FlatSpec, Matchers}
 

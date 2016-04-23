@@ -1,6 +1,6 @@
-package _2gettingstarted
+package gettingstarted
 
-import _2gettingstarted.GettingStarted.{fibTailRecursive, fib, isSorted}
+import gettingstarted.GettingStarted.{fib, fibTailRecursive, isSorted}
 import org.scalatest.{FlatSpec, Matchers}
 
 class GettingStartedTest extends FlatSpec with Matchers with FibonacciBehavior {
@@ -17,7 +17,7 @@ class GettingStartedTest extends FlatSpec with Matchers with FibonacciBehavior {
 
     isSorted(Array(14, 1, -10), IntInverseOrder)
 
-    isSorted(Array("a", "aa", "cdg"), (a:String, b:String) => a.length < b.length)
+    isSorted(Array("a", "aa", "cdg"), (a: String, b: String) => a.length < b.length)
   }
 
   it should "return false for unordered arrays" in {

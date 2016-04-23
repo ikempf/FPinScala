@@ -1,6 +1,6 @@
-package _5laziness
+package laziness
 
-import _5laziness.Stream.{cons, empty, unfold}
+import laziness.Stream.{cons, empty, unfold}
 
 import scala.annotation.tailrec
 
@@ -119,7 +119,7 @@ trait Stream[+A] {
 
   // !TODO: get this to work ...
   def scanRight[B](z: B)(f: (A, => B) => B): Stream[B] = {
-    def scanInner(s: Stream[A], z2:B, y: Stream[B]): Stream[B] = s match {
+    def scanInner(s: Stream[A], z2: B, y: Stream[B]): Stream[B] = s match {
       case Empty => y
       case Cons(h, t) => scanInner(t(), f(h(), z2), cons(f(h(), z2), y))
     }
@@ -139,6 +139,7 @@ case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
 
 object Stream {
+
   def cons[A](hd: => A, tl: => Stream[A]): Stream[A] = {
     lazy val head = hd
     lazy val tail = tl

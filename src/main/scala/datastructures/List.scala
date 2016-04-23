@@ -1,4 +1,4 @@
-package _3datastructures
+package datastructures
 
 import scala.annotation.tailrec
 
@@ -23,7 +23,6 @@ object List {
   def apply[A](as: A*): List[A] =
     if (as.isEmpty) Nil
     else Cons(as.head, apply(as.tail: _*))
-
 
   def foldRight[A, B](as: List[A], z: B)(f: (A, B) => B): B =
     as match {
@@ -60,7 +59,7 @@ object List {
     case Cons(h, t) => if (f(h)) dropWhile(t, f) else l
   }
 
-  // Can't be implemented in canstant time because our List implementation is singly linked
+  // Can't be implemented in constant time because our List implementation is singly linked
   def init[A](l: List[A]): List[A] = l match {
     case Nil => Nil
     case Cons(h, Nil) => Nil

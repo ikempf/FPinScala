@@ -1,4 +1,4 @@
-package _3datastructures
+package datastructures
 
 import org.scalatest.{FlatSpec, Matchers}
 

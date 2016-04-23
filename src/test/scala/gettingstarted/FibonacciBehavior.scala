@@ -1,4 +1,4 @@
-package _2gettingstarted
+package gettingstarted
 
 import org.scalatest.{FlatSpec, Matchers}
 
